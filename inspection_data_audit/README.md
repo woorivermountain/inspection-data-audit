@@ -34,6 +34,8 @@
 
 macOS 기본 `python3` 또는 기존 데이터 폴더의 가상환경을 사용할 수 있다.
 
+다른 컴퓨터에서 처음부터 재현하려면 [REPRODUCE.md](REPRODUCE.md)를 따른다. 공개 Siemens 실험은 `run_public.sh`, 로컬 현장 원자료를 포함한 감사 실험은 기존 `run.sh`로 분리되어 있다. 기록된 결과와 최대한 같은 환경은 Python 3.11과 `requirements-lock.txt`를 사용한다.
+
 ## 가장 간단한 실행
 
 ```bash
