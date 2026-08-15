@@ -152,6 +152,15 @@ python3 -m unittest discover -s tests -v
 
 이 결과로 시간 드리프트의 운영 실패를 확증할 수는 없다. 기준 모델이 학습 기간부터 업무목표를 달성하지 못했기 때문이다. 대신 AUROC 0.741이 운영 가능성을 의미하지 않는다는 사실과, 시간 평가 전에 학습 feasibility를 먼저 검사해야 한다는 순서를 확인했다.
 
+## 5단계 비선형 feasibility 결과
+
+- 고정 HistGradientBoosting 모델의 학습 AUROC는 0.997, calibration AUROC는 0.870, 미래 AUROC는 0.878이었다.
+- calibration에서 slip rate 0.62%를 만족했지만 volume reduction은 1.65%로 목표 40%에 미달했다.
+- 미래 전체도 slip rate 0.85%, volume reduction 3.16%로 두 목표를 동시에 충족하지 못했다.
+- calibration gate가 실패했으므로 미래 구간 결과를 시간 드리프트의 효과로 해석하지 않는다.
+
+선형 모델보다 AUROC는 크게 높아졌지만 엄격한 defect 보호 조건에서 자동 통과시킬 수 있는 false call은 매우 적었다. 다음 단계에서는 임의의 모델을 계속 추가하지 않고, Siemens 데이터에 대해 발표된 기준 방법의 전처리·특징·분할·업무지표를 그대로 재현해 구현 차이와 데이터 한계를 구분한다.
+
 ## 이번 단계의 완료 조건
 
 - 저장된 수치가 동일 입력에서 재현된다.
