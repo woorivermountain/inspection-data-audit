@@ -14,6 +14,7 @@
 - `notion_research_plan.md`: 노션에 바로 붙여넣을 연구 배경·문제정의·실행계획
 - `audit_current_data.py`: 현재 데이터의 핵심 수치와 불일치를 재검산
 - `simulate_pathologies.py`: 합성 병리 주입 벤치마크
+- `performance_gap_experiment.py`: 무작위 평가와 배치 조건 평가의 성능 격차 실험
 - `run.sh`: 두 실험을 순서대로 실행
 - `tests/`: 지표 계산 단위 테스트
 - `outputs/`: 실행 시 생성되는 CSV, JSON, Markdown 결과
@@ -58,6 +59,15 @@ python3 simulate_pathologies.py \
   --output-dir outputs
 ```
 
+성능 격차 예측 실험:
+
+```bash
+python3 performance_gap_experiment.py \
+  --seeds 100 \
+  --events 300 \
+  --output-dir outputs
+```
+
 테스트:
 
 ```bash
@@ -72,6 +82,9 @@ python3 -m unittest discover -s tests -v
 - `outputs/synthetic_benchmark.csv`: 시드별 병리 주입 결과
 - `outputs/synthetic_summary.csv`: 병리·강도별 요약
 - `outputs/synthetic_report.md`: 합성 실험 판정 보고서
+- `outputs/performance_gap_runs.csv`: 시드별 무작위·그룹·배치 성능
+- `outputs/performance_gap_summary.csv`: 병리·강도별 성능 격차 요약
+- `outputs/performance_gap_report.md`: 감사 지표–성능 격차 상관 보고서
 
 ## 이번 단계의 완료 조건
 
@@ -79,3 +92,4 @@ python3 -m unittest discover -s tests -v
 - 서로 다른 정의의 수치가 같은 이름으로 섞이지 않는다.
 - 각 합성 병리의 전용 지표가 강도 증가에 따라 대체로 단조 증가한다.
 - 깨끗한 대조군과 병리 데이터가 구분되지 않으면 해당 지표는 다음 단계로 넘기지 않는다.
+- 감사 지표와 배치 성능 격차의 Spearman 상관을 병리별로 보고한다.

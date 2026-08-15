@@ -15,6 +15,11 @@ OUTPUT_DIR="$SCRIPT_DIR/outputs"
   --events 300 \
   --output-dir "$OUTPUT_DIR"
 
+"$PYTHON_BIN" "$SCRIPT_DIR/performance_gap_experiment.py" \
+  --seeds 100 \
+  --events 300 \
+  --output-dir "$OUTPUT_DIR"
+
 "$PYTHON_BIN" -m unittest discover -s "$SCRIPT_DIR/tests" -v
 
 echo "완료: $OUTPUT_DIR"

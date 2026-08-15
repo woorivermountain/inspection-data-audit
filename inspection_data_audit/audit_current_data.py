@@ -86,8 +86,12 @@ def audit(data_root: Path) -> tuple[dict[str, dict[str, Any]], list[dict[str, st
 
     result_lookup = {(row.get("protocol"), row.get("method"), row.get("imgset")): row for row in model_results}
     selected_results = {
+        "date_random_auroc": ("A-무작위", "date-only", "meta"),
         "date_lodo_auroc": ("B-LODO", "date-only", "meta"),
         "border_red_lodo_auroc": ("B-LODO", "border-red", "meta"),
+        "patchcore_crop_random_auroc": ("A-무작위", "PatchCore", "img_crop"),
+        "patchcore_clean_random_auroc": ("A-무작위", "PatchCore", "img_clean"),
+        "patchcore_crop_lodo_auroc": ("B-LODO", "PatchCore", "img_crop"),
         "patchcore_clean_lodo_auroc": ("B-LODO", "PatchCore", "img_clean"),
         "clip_clean_lodo_auroc": ("B-LODO", "CLIP-zeroshot", "img_clean"),
     }
@@ -98,6 +102,19 @@ def audit(data_root: Path) -> tuple[dict[str, dict[str, Any]], list[dict[str, st
                 safe_float(row.get("auroc")), "AUROC", sources["model_results"],
                 f"protocol={key[0]}, method={key[1]}, imgset={key[2]}",
                 f"95% CI [{row.get('lo')}, {row.get('hi')}], n_pos={row.get('n_pos')}",
+            )
+
+    for name, random_name, lodo_name, asset in (
+        ("date_protocol_gap", "date_random_auroc", "date_lodo_auroc", "meta"),
+        ("patchcore_crop_protocol_gap", "patchcore_crop_random_auroc", "patchcore_crop_lodo_auroc", "img_crop"),
+        ("patchcore_clean_protocol_gap", "patchcore_clean_random_auroc", "patchcore_clean_lodo_auroc", "img_clean"),
+    ):
+        if random_name in metrics and lodo_name in metrics:
+            gap = safe_float(metrics[random_name]["value"]) - safe_float(metrics[lodo_name]["value"])
+            metrics[name] = metric(
+                round(gap, 6), "AUROC 차이", sources["model_results"],
+                f"A-무작위 AUROC - B-LODO AUROC ({asset})",
+                "양수이면 무작위 평가가 날짜 단위 외삽보다 낙관적",
             )
 
     pass_warnings = sum(safe_int(row.get("verdict")) == 1 for row in warnings)
@@ -176,7 +193,9 @@ def write_outputs(output_dir: Path, metrics: dict[str, dict[str, Any]], flags: l
         f"- 제품 {value('product_units')}개, ROI {value('roi_rows')}행, 이미지 {value('image_count')}장",
         f"- 설비 판정 규칙 재현율: {value('machine_rule_recovery')}",
         f"- 날짜 재대입 정확도: {value('date_resub_accuracy')} / 날짜 LODO AUROC: {value('date_lodo_auroc')}",
+        f"- date-only 무작위-LODO 격차: {value('date_protocol_gap')}",
         f"- 테두리 적색 LODO AUROC: {value('border_red_lodo_auroc')}",
+        f"- PatchCore 무작위-LODO 격차: crop {value('patchcore_crop_protocol_gap')}, clean {value('patchcore_clean_protocol_gap')}",
         f"- 오버레이 제거 PatchCore LODO AUROC: {value('patchcore_clean_lodo_auroc')}",
         f"- 사람 판정: 차이 민감도 {value('human_diff_sensitivity')}, 동일 특이도 {value('human_same_specificity')}, 반복 일치 {value('human_repeat_agreement')}",
         f"- 사양 기권 q10 개선: {value('lovo_q10_improvement')}",
