@@ -45,18 +45,42 @@ def group_resubstitution_accuracy(rows: Iterable[Mapping[str, str]], group: str,
 
 def binary_auc(labels: Sequence[int], scores: Sequence[float]) -> float:
     """Tie-aware AUROC using the Mann-Whitney interpretation."""
-    pos = [s for y, s in zip(labels, scores) if y == 1]
-    neg = [s for y, s in zip(labels, scores) if y == 0]
-    if not pos or not neg:
+    pairs = sorted((float(score), int(label)) for label, score in zip(labels, scores))
+    positives = sum(label == 1 for _, label in pairs)
+    negatives = len(pairs) - positives
+    if not positives or not negatives:
         return float("nan")
+
+    # Sum the average ranks of positives without materialising every rank.
+    positive_rank_sum = 0.0
+    start = 0
+    while start < len(pairs):
+        end = start + 1
+        while end < len(pairs) and pairs[end][0] == pairs[start][0]:
+            end += 1
+        average_rank = (start + 1 + end) / 2.0
+        positive_rank_sum += average_rank * sum(label == 1 for _, label in pairs[start:end])
+        start = end
+
+    mann_whitney = positive_rank_sum - positives * (positives + 1) / 2.0
+    return mann_whitney / (positives * negatives)
+
+
+def grouped_binary_auc(group_counts: Mapping[str, Mapping[int, int]]) -> float:
+    """Exact AUROC when every row in a sorted group has the same score."""
+    positives = sum(int(counts.get(1, 0)) for counts in group_counts.values())
+    negatives = sum(int(counts.get(0, 0)) for counts in group_counts.values())
+    if not positives or not negatives:
+        return float("nan")
+    negative_before = 0
     wins = 0.0
-    for p in pos:
-        for n in neg:
-            if p > n:
-                wins += 1.0
-            elif p == n:
-                wins += 0.5
-    return wins / (len(pos) * len(neg))
+    for group in sorted(group_counts):
+        counts = group_counts[group]
+        positive = int(counts.get(1, 0))
+        negative = int(counts.get(0, 0))
+        wins += positive * negative_before + 0.5 * positive * negative
+        negative_before += negative
+    return wins / (positives * negatives)
 
 
 def mean(values: Iterable[float]) -> float:

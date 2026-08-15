@@ -20,6 +20,16 @@ OUTPUT_DIR="$SCRIPT_DIR/outputs"
   --events 300 \
   --output-dir "$OUTPUT_DIR"
 
+if [ -f "$SCRIPT_DIR/external_data/siemens/dataset.csv" ] && \
+   [ -f "$SCRIPT_DIR/external_data/siemens/mapping.json" ]; then
+  "$PYTHON_BIN" "$SCRIPT_DIR/external_validate_siemens.py" \
+    --dataset "$SCRIPT_DIR/external_data/siemens/dataset.csv" \
+    --mapping "$SCRIPT_DIR/external_data/siemens/mapping.json" \
+    --output-dir "$OUTPUT_DIR"
+else
+  echo "[건너뜀] Siemens 외부 데이터 없음: download_siemens.py를 먼저 실행하세요"
+fi
+
 "$PYTHON_BIN" -m unittest discover -s "$SCRIPT_DIR/tests" -v
 
 echo "완료: $OUTPUT_DIR"

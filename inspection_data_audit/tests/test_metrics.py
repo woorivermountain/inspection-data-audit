@@ -5,13 +5,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from metrics import binary_auc, group_resubstitution_accuracy
+from metrics import binary_auc, group_resubstitution_accuracy, grouped_binary_auc
 from performance_gap_experiment import (
     DiagonalDiscriminant,
     generate_period,
     spearman,
     split_grouped_events,
 )
+from external_validate_siemens import RunningStats, stable_bucket
 
 
 class MetricsTest(unittest.TestCase):
@@ -20,6 +21,13 @@ class MetricsTest(unittest.TestCase):
 
     def test_binary_auc_ties(self):
         self.assertEqual(binary_auc([0, 1], [0.5, 0.5]), 0.5)
+
+    def test_binary_auc_mixed_ties(self):
+        self.assertEqual(binary_auc([0, 1, 0, 1], [0.1, 0.1, 0.2, 0.3]), 0.625)
+
+    def test_grouped_binary_auc_matches_expanded_rows(self):
+        groups = {"A": {0: 1, 1: 1}, "B": {0: 1, 1: 0}, "C": {0: 0, 1: 1}}
+        self.assertEqual(grouped_binary_auc(groups), 0.625)
 
     def test_group_resubstitution_accuracy(self):
         rows = [
@@ -44,6 +52,17 @@ class MetricsTest(unittest.TestCase):
         positive_scores = [model.score(row, memorize_events=False) for row in rows if row["observed_label"] == 1]
         negative_scores = [model.score(row, memorize_events=False) for row in rows if row["observed_label"] == 0]
         self.assertGreater(sum(positive_scores) / len(positive_scores), sum(negative_scores) / len(negative_scores))
+
+    def test_running_stats(self):
+        stats = RunningStats()
+        for value in (1.0, 2.0, 3.0):
+            stats.add(value)
+        self.assertEqual(stats.mean, 2.0)
+        self.assertEqual(stats.variance, 1.0)
+
+    def test_stable_bucket(self):
+        self.assertEqual(stable_bucket("same-event", 7), stable_bucket("same-event", 7))
+        self.assertTrue(0 <= stable_bucket("same-event", 7) < 10_000)
 
 
 if __name__ == "__main__":

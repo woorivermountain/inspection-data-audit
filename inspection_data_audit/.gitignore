@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
+external_data/
 outputs/*
 !outputs/current_metrics.json
 !outputs/evidence_ledger.csv
@@ -9,3 +10,5 @@ outputs/*
 !outputs/performance_gap_summary.csv
 !outputs/performance_gap_correlations.csv
 !outputs/performance_gap_report.md
+!outputs/siemens_external_summary.csv
+!outputs/siemens_external_report.md
