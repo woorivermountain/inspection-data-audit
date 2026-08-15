@@ -26,6 +26,11 @@ if [ -f "$SCRIPT_DIR/external_data/siemens/dataset.csv" ] && \
     --dataset "$SCRIPT_DIR/external_data/siemens/dataset.csv" \
     --mapping "$SCRIPT_DIR/external_data/siemens/mapping.json" \
     --output-dir "$OUTPUT_DIR"
+  "$PYTHON_BIN" "$SCRIPT_DIR/temporal_followup_siemens.py" \
+    --dataset "$SCRIPT_DIR/external_data/siemens/dataset.csv" \
+    --mapping "$SCRIPT_DIR/external_data/siemens/mapping.json" \
+    --output-dir "$OUTPUT_DIR" \
+    --skip-hash
 else
   echo "[건너뜀] Siemens 외부 데이터 없음: download_siemens.py를 먼저 실행하세요"
 fi

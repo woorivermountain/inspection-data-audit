@@ -13,6 +13,7 @@ from performance_gap_experiment import (
     split_grouped_events,
 )
 from external_validate_siemens import RunningStats, stable_bucket
+from temporal_followup_siemens import business_metrics, select_threshold
 
 
 class MetricsTest(unittest.TestCase):
@@ -63,6 +64,20 @@ class MetricsTest(unittest.TestCase):
     def test_stable_bucket(self):
         self.assertEqual(stable_bucket("same-event", 7), stable_bucket("same-event", 7))
         self.assertTrue(0 <= stable_bucket("same-event", 7) < 10_000)
+
+    def test_business_threshold_is_fixed_from_positives(self):
+        labels = [1] * 100 + [0] * 100
+        scores = [float(value) for value in range(100)] + [50.0] * 100
+        threshold = select_threshold(labels, scores, target_slip=0.01)
+        result = business_metrics(labels, scores, threshold)
+        self.assertEqual(threshold, 1.0)
+        self.assertEqual(result.slip_rate, 0.01)
+
+    def test_business_metrics_targets(self):
+        result = business_metrics([1, 1, 0, 0], [1.0, 1.0, -1.0, 1.0], threshold=0.0)
+        self.assertEqual(result.slip_rate, 0.0)
+        self.assertEqual(result.volume_reduction, 0.5)
+        self.assertTrue(result.target_met)
 
 
 if __name__ == "__main__":

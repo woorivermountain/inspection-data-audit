@@ -12,3 +12,5 @@ outputs/*
 !outputs/performance_gap_report.md
 !outputs/siemens_external_summary.csv
 !outputs/siemens_external_report.md
+!outputs/temporal_followup_business.csv
+!outputs/temporal_followup_report.md

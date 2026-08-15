@@ -19,6 +19,7 @@
 - `performance_gap_experiment.py`: 무작위 평가와 배치 조건 평가의 성능 격차 실험
 - `download_siemens.py`: 공식 Siemens 파일 다운로드·이어받기·SHA-256 검증
 - `external_validate_siemens.py`: 행 무작위·timestamp 그룹·미래 시간 외부 검증
+- `temporal_followup_siemens.py`: 시간 구간·defect slip·volume reduction 사후 개발 실험
 - `run.sh`: 내부 실험과, 데이터가 있을 경우 외부 검증을 순서대로 실행
 - `tests/`: 지표 계산 단위 테스트
 - `outputs/`: 실행 시 생성되는 CSV, JSON, Markdown 결과
@@ -86,6 +87,12 @@ Siemens 외부 검증:
 python3 external_validate_siemens.py
 ```
 
+Siemens 시간·업무지표 후속 개발 실험:
+
+```bash
+python3 temporal_followup_siemens.py
+```
+
 테스트:
 
 ```bash
@@ -105,6 +112,8 @@ python3 -m unittest discover -s tests -v
 - `outputs/performance_gap_report.md`: 감사 지표–성능 격차 상관 보고서
 - `outputs/siemens_external_summary.csv`: 외부 검증 핵심 결과 한 행
 - `outputs/siemens_external_report.md`: 고정 판정과 사후 탐색을 구분한 외부 검증 보고서
+- `outputs/temporal_followup_business.csv`: 학습·미래 구간별 confusion matrix와 업무지표
+- `outputs/temporal_followup_report.md`: 다음 외부 데이터용 시간 강건성 후보 프로토콜
 
 ## 3단계 외부 검증 요약
 
@@ -115,6 +124,15 @@ python3 -m unittest discover -s tests -v
 - 미래 5구간 AUROC는 0.545~0.874로 불안정했다. 이 범위는 사후 탐색이며 확증 판정을 바꾸는 데 사용하지 않는다.
 
 따라서 현재 프로토콜은 비독립 행을 외부 데이터에서 검출했지만, 알려진 시간 동역학을 단일 집계 격차로 검출하지 못했다. 이는 외부 검증 실패이자 다음 지표 설계의 근거다.
+
+## 4단계 후속 개발 요약
+
+- timestamp-only AUROC는 0.642, 무작위 AUROC와 최악 미래 구간 AUROC의 차이는 0.196이었다.
+- 학습 기간에서 defect slip rate 1% 이하가 되도록 임계값을 고정했다.
+- 단순 선형 모델의 학습 volume reduction은 2.7%로 목표 40%에 크게 미달했다.
+- 미래 전체 slip rate는 1.6%, volume reduction은 2.7%였고 미래 5구간 모두 두 목표를 동시에 달성하지 못했다.
+
+이 결과로 시간 드리프트의 운영 실패를 확증할 수는 없다. 기준 모델이 학습 기간부터 업무목표를 달성하지 못했기 때문이다. 대신 AUROC 0.741이 운영 가능성을 의미하지 않는다는 사실과, 시간 평가 전에 학습 feasibility를 먼저 검사해야 한다는 순서를 확인했다.
 
 ## 이번 단계의 완료 조건
 
