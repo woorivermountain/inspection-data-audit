@@ -72,6 +72,9 @@ def aggregate(rows: list[dict[str, object]], period: str) -> dict[str, float]:
         values = [float(row[key]) for row in selected]
         result[f"{key}_mean"] = statistics.mean(values)
         result[f"{key}_sd"] = statistics.stdev(values) if len(values) > 1 else 0.0
+        result[f"{key}_min"] = min(values)
+        result[f"{key}_max"] = max(values)
+    result["target_passes"] = float(sum(bool(row["target_met"]) for row in selected))
     return result
 
 
@@ -212,6 +215,13 @@ def main() -> None:
         "## 판정",
         "",
         f"무작위 test gate: **{'통과' if random_gate else '미달'}**. 미래 목표 미달: **{future_failures}/5개 구간**.",
+        f"무작위 test의 시드별 gate 통과는 **{int(summaries['random_test']['target_passes'])}/{args.seeds}회**였고, "
+        f"slip 범위는 {summaries['random_test']['slip_rate_min']:.3f}~{summaries['random_test']['slip_rate_max']:.3f}, "
+        f"volume 범위는 {summaries['random_test']['volume_reduction_min']:.3f}~{summaries['random_test']['volume_reduction_max']:.3f}였다.",
+        f"미래 평가는 총 **{5 * args.seeds}개 시드-구간 중 "
+        f"{sum(int(summaries[period]['target_passes']) for period in periods[1:])}개**만 두 업무목표를 동시에 충족했다.",
+        "",
+        "따라서 무작위 분할에서 미래 평가로 이동할 때 업무목표가 붕괴하는 정성적 현상은 재현됐다. 다만 무작위 test 평균부터 논문 RFC2의 volume과 차이가 크므로 수치의 완전 재현으로 해석하지 않는다.",
         "",
         "논문 값과 차이가 나면 이를 데이터 재현 실패로 단정하지 않는다. 공개되지 않은 search space·최종 hyperparameter·코드 버전과 현재 라이브러리 버전이 잠재 원인이다.",
         "",
