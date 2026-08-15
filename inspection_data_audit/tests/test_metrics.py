@@ -15,6 +15,7 @@ from performance_gap_experiment import (
 from external_validate_siemens import RunningStats, stable_bucket
 from temporal_followup_siemens import business_metrics, select_threshold
 from nonlinear_feasibility_siemens import split_boundaries
+from paper_protocol_reconstruction_siemens import paper_time_boundaries
 
 
 class MetricsTest(unittest.TestCase):
@@ -87,6 +88,12 @@ class MetricsTest(unittest.TestCase):
         self.assertEqual(calibration_end, "T069")
         self.assertEqual(len(slice_ends), 4)
         self.assertLess(train_end, calibration_end)
+
+    def test_paper_protocol_uses_half_for_five_future_slices(self):
+        timestamps = [f"T{index:03d}" for index in range(100)]
+        modeling_end, slice_ends = paper_time_boundaries(timestamps)
+        self.assertEqual(modeling_end, "T049")
+        self.assertEqual(slice_ends, ["T059", "T069", "T079", "T089"])
 
 
 if __name__ == "__main__":

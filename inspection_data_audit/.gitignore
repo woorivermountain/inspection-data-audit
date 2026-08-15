@@ -16,3 +16,5 @@ outputs/*
 !outputs/temporal_followup_report.md
 !outputs/nonlinear_feasibility_business.csv
 !outputs/nonlinear_feasibility_report.md
+!outputs/paper_protocol_reconstruction_runs.csv
+!outputs/paper_protocol_reconstruction_report.md

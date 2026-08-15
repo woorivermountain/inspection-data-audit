@@ -21,6 +21,7 @@
 - `external_validate_siemens.py`: 행 무작위·timestamp 그룹·미래 시간 외부 검증
 - `temporal_followup_siemens.py`: 시간 구간·defect slip·volume reduction 사후 개발 실험
 - `nonlinear_feasibility_siemens.py`: 고정 비선형 모델의 calibration feasibility gate와 미래 평가
+- `paper_protocol_reconstruction_siemens.py`: 논문의 40/10/10×5 분할과 CV 임계값 절차 부분 재현
 - `run.sh`: 내부 실험과, 데이터가 있을 경우 외부 검증을 순서대로 실행
 - `tests/`: 지표 계산 단위 테스트
 - `outputs/`: 실행 시 생성되는 CSV, JSON, Markdown 결과
@@ -109,6 +110,22 @@ python3 temporal_followup_siemens.py
   nonlinear_feasibility_siemens.py --skip-hash
 ```
 
+논문 프로토콜 부분 재현은 먼저 1시드 파일럿으로 실행한다.
+
+```bash
+/Users/woorivermountain/Desktop/data/.venv/bin/python \
+  paper_protocol_reconstruction_siemens.py --skip-hash --seeds 1
+```
+
+파일럿이 정상 완료된 후 논문과 같은 10시드 실행:
+
+```bash
+/Users/woorivermountain/Desktop/data/.venv/bin/python \
+  paper_protocol_reconstruction_siemens.py --skip-hash --seeds 10
+```
+
+원 논문이 인용한 GitLab 코드는 현재 인증 없이는 접근할 수 없고 Bayesian search space도 논문에 기재되지 않았다. 따라서 이 스크립트는 완전 동일 코드 재현이 아니라 공개된 데이터 분할과 임계값 선택 절차의 부분 재현이다.
+
 테스트:
 
 ```bash
@@ -132,6 +149,8 @@ python3 -m unittest discover -s tests -v
 - `outputs/temporal_followup_report.md`: 다음 외부 데이터용 시간 강건성 후보 프로토콜
 - `outputs/nonlinear_feasibility_business.csv`: 비선형 모델의 구간별 AUROC·업무지표
 - `outputs/nonlinear_feasibility_report.md`: calibration gate와 미래 시간 평가 보고서
+- `outputs/paper_protocol_reconstruction_runs.csv`: 시드·시간 구간별 부분 재현 결과
+- `outputs/paper_protocol_reconstruction_report.md`: 논문 RFC2 보고값과의 비교
 
 ## 3단계 외부 검증 요약
 
