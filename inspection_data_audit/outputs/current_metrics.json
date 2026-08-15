@@ -1,0 +1,236 @@
+{
+  "metrics": {
+    "product_units": {
+      "value": 100,
+      "unit": "제품",
+      "source": "analysis/out/01_product_log.csv",
+      "definition": "제품 로그 행 수",
+      "interpretation": "ROI 행의 상위 독립 단위 후보"
+    },
+    "roi_rows": {
+      "value": 7800,
+      "unit": "ROI 행",
+      "source": "analysis/out/02_roi_records.csv",
+      "definition": "ROI 판정 레코드 수",
+      "interpretation": "독립 사건 수와 구분해야 함"
+    },
+    "image_count": {
+      "value": 364,
+      "unit": "이미지",
+      "source": "analysis/out/04_image_index.csv",
+      "definition": "이미지 인덱스 행 수",
+      "interpretation": "결과 화면이며 원본 여부를 별도 기록해야 함"
+    },
+    "machine_rule_recovery": {
+      "value": 1.0,
+      "unit": "비율",
+      "source": "analysis/out/02_roi_records.csv",
+      "definition": "max(OPoint, RPoint) >= MatchCutline 과 PassYN의 일치율",
+      "interpretation": "독립 정답이 아니라 설비 출력과 결정적으로 연결된 라벨인지 점검"
+    },
+    "date_resub_accuracy": {
+      "value": 0.961538,
+      "unit": "비율",
+      "source": "analysis/out/04_image_index.csv",
+      "definition": "날짜별 최빈 라벨을 같은 데이터에 재대입",
+      "interpretation": "외삽 성능이 아니라 수집 지원 편향"
+    },
+    "image_majority_accuracy": {
+      "value": 0.81044,
+      "unit": "비율",
+      "source": "analysis/out/04_image_index.csv",
+      "definition": "전체 이미지 다수 라벨 정확도",
+      "interpretation": "날짜 재대입 lift의 기준선"
+    },
+    "mixed_label_days": {
+      "value": 5,
+      "unit": "일",
+      "source": "analysis/out/04_image_index.csv",
+      "definition": "정상과 불합격 이미지가 모두 존재하는 날짜 수",
+      "interpretation": "날짜 교락의 데이터 지원 범위"
+    },
+    "total_image_days": {
+      "value": 23,
+      "unit": "일",
+      "source": "analysis/out/04_image_index.csv",
+      "definition": "이미지가 존재하는 고유 날짜 수",
+      "interpretation": "날짜 단위 평가의 분모"
+    },
+    "date_random_auroc": {
+      "value": 0.9181,
+      "unit": "AUROC",
+      "source": "experiments/results/results.csv",
+      "definition": "protocol=A-무작위, method=date-only, imgset=meta",
+      "interpretation": "95% CI [0.863, 0.9627], n_pos=69"
+    },
+    "date_lodo_auroc": {
+      "value": 0.526,
+      "unit": "AUROC",
+      "source": "experiments/results/results.csv",
+      "definition": "protocol=B-LODO, method=date-only, imgset=meta",
+      "interpretation": "95% CI [0.287, 0.7355], n_pos=5"
+    },
+    "border_red_lodo_auroc": {
+      "value": 1.0,
+      "unit": "AUROC",
+      "source": "experiments/results/results.csv",
+      "definition": "protocol=B-LODO, method=border-red, imgset=meta",
+      "interpretation": "95% CI [1.0, 1.0], n_pos=5"
+    },
+    "patchcore_crop_random_auroc": {
+      "value": 0.8995,
+      "unit": "AUROC",
+      "source": "experiments/results/results.csv",
+      "definition": "protocol=A-무작위, method=PatchCore, imgset=img_crop",
+      "interpretation": "95% CI [0.8452, 0.945], n_pos=69"
+    },
+    "patchcore_clean_random_auroc": {
+      "value": 0.7595,
+      "unit": "AUROC",
+      "source": "experiments/results/results.csv",
+      "definition": "protocol=A-무작위, method=PatchCore, imgset=img_clean",
+      "interpretation": "95% CI [0.6802, 0.833], n_pos=69"
+    },
+    "patchcore_crop_lodo_auroc": {
+      "value": 0.6368,
+      "unit": "AUROC",
+      "source": "experiments/results/results.csv",
+      "definition": "protocol=B-LODO, method=PatchCore, imgset=img_crop",
+      "interpretation": "95% CI [0.5381, 0.7247], n_pos=5"
+    },
+    "patchcore_clean_lodo_auroc": {
+      "value": 0.5578,
+      "unit": "AUROC",
+      "source": "experiments/results/results.csv",
+      "definition": "protocol=B-LODO, method=PatchCore, imgset=img_clean",
+      "interpretation": "95% CI [0.252, 0.8404], n_pos=5"
+    },
+    "clip_clean_lodo_auroc": {
+      "value": 0.5058,
+      "unit": "AUROC",
+      "source": "experiments/results/results.csv",
+      "definition": "protocol=B-LODO, method=CLIP-zeroshot, imgset=img_clean",
+      "interpretation": "95% CI [0.1874, 0.817], n_pos=5"
+    },
+    "date_protocol_gap": {
+      "value": 0.3921,
+      "unit": "AUROC 차이",
+      "source": "experiments/results/results.csv",
+      "definition": "A-무작위 AUROC - B-LODO AUROC (meta)",
+      "interpretation": "양수이면 무작위 평가가 날짜 단위 외삽보다 낙관적"
+    },
+    "patchcore_crop_protocol_gap": {
+      "value": 0.2627,
+      "unit": "AUROC 차이",
+      "source": "experiments/results/results.csv",
+      "definition": "A-무작위 AUROC - B-LODO AUROC (img_crop)",
+      "interpretation": "양수이면 무작위 평가가 날짜 단위 외삽보다 낙관적"
+    },
+    "patchcore_clean_protocol_gap": {
+      "value": 0.2017,
+      "unit": "AUROC 차이",
+      "source": "experiments/results/results.csv",
+      "definition": "A-무작위 AUROC - B-LODO AUROC (img_clean)",
+      "interpretation": "양수이면 무작위 평가가 날짜 단위 외삽보다 낙관적"
+    },
+    "warning_rows_total": {
+      "value": 60,
+      "unit": "행",
+      "source": "analysis/out/10_warnings.csv",
+      "definition": "저장된 경고 행 전체",
+      "interpretation": "통과 이탈과 불합격을 분리해 보고"
+    },
+    "warning_rows_pass": {
+      "value": 58,
+      "unit": "행",
+      "source": "analysis/out/10_warnings.csv",
+      "definition": "verdict=1 경고",
+      "interpretation": "라벨 없이 추가로 찾은 통과 이탈"
+    },
+    "warning_rows_fail": {
+      "value": 2,
+      "unit": "행",
+      "source": "analysis/out/10_warnings.csv",
+      "definition": "verdict=0 경고",
+      "interpretation": "이미 불합격인 두 사건"
+    },
+    "human_diff_sensitivity": {
+      "value": 1.0,
+      "unit": "비율",
+      "source": "roi_perception_labels.csv",
+      "definition": "차이를 심은 대조군에서 DIFF 응답 비율",
+      "interpretation": "21/21"
+    },
+    "human_same_specificity": {
+      "value": 0.826087,
+      "unit": "비율",
+      "source": "roi_perception_labels.csv",
+      "definition": "동일 대조군에서 SAME 응답 비율",
+      "interpretation": "19/23"
+    },
+    "human_repeat_agreement": {
+      "value": 0.416667,
+      "unit": "비율",
+      "source": "roi_perception_labels.csv",
+      "definition": "반복 문항과 최초 응답의 단순 일치율",
+      "interpretation": "5/12; 전문가 타당도와 별개"
+    },
+    "lovo_random_q10": {
+      "value": 0.014102564102564103,
+      "unit": "잔여 오류율",
+      "source": "derive/results/stagen_lovo.csv",
+      "definition": "f=major, g=random, q=10%",
+      "interpretation": "실데이터 무작위 질문 기준선"
+    },
+    "lovo_best_q10": {
+      "value": 0.014102564102564103,
+      "unit": "잔여 오류율",
+      "source": "derive/results/stagen_lovo.csv",
+      "definition": "f=major, g=disagree, q=10%",
+      "interpretation": "무작위보다 낮지 않으면 기권 방법의 실데이터 근거 없음"
+    },
+    "lovo_q10_improvement": {
+      "value": 0.0,
+      "unit": "오류율 감소",
+      "source": "derive/results/stagen_lovo.csv",
+      "definition": "무작위 q10 - 최고 비무작위 q10",
+      "interpretation": "0 이하면 실데이터에서 개선 없음"
+    },
+    "analyst_log_actual": {
+      "value": 17,
+      "unit": "건",
+      "source": "cases/STG-2026-01/case.yaml",
+      "definition": "case.yaml의 error_id 항목 수",
+      "interpretation": "최신 사례 기록"
+    },
+    "analyst_log_summary": {
+      "value": 6,
+      "unit": "건",
+      "source": "cases/summary.csv",
+      "definition": "summary.csv 오류기록 값",
+      "interpretation": "최신 사례 기록과 다르면 stale artifact"
+    }
+  },
+  "flags": [
+    {
+      "severity": "high",
+      "issue": "stale_summary",
+      "detail": "analyst_log 실제 17건, summary.csv 6건"
+    },
+    {
+      "severity": "high",
+      "issue": "resubstitution_vs_extrapolation",
+      "detail": "날짜 재대입 정확도와 LODO AUROC 차이 0.436"
+    },
+    {
+      "severity": "high",
+      "issue": "human_repeatability",
+      "detail": "반복 일치 5/12"
+    },
+    {
+      "severity": "high",
+      "issue": "no_lovo_improvement",
+      "detail": "q10 무작위=0.014103, 최고 비무작위=0.014103"
+    }
+  ]
+}

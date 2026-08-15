@@ -177,7 +177,11 @@ def write_outputs(output_dir: Path, metrics: dict[str, dict[str, Any]], flags: l
         json.dump({"metrics": metrics, "flags": flags}, stream, ensure_ascii=False, indent=2)
 
     with (output_dir / "evidence_ledger.csv").open("w", encoding="utf-8-sig", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=["metric", "value", "unit", "source", "definition", "interpretation"])
+        writer = csv.DictWriter(
+            stream,
+            fieldnames=["metric", "value", "unit", "source", "definition", "interpretation"],
+            lineterminator="\n",
+        )
         writer.writeheader()
         for name, item in metrics.items():
             writer.writerow({"metric": name, **item})

@@ -260,7 +260,7 @@ def write_csv(path: Path, rows: Sequence[dict[str, object]]) -> None:
     if not rows:
         return
     with path.open("w", encoding="utf-8-sig", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
