@@ -378,6 +378,8 @@ Siemens 결과를 보고 만든 다음 항목은 동일 데이터에서 확증�
 - [x] 시간 지표 수정안을 별도 개발 프로토콜로 기록
 - [x] 선형 기준 모델의 slip rate·volume reduction 실행
 - [ ] 학습 feasibility gate를 통과할 비선형 기준 모델 사전 고정
+- [x] 비선형 기준 모델·50/20/30 시간 분할·hyperparameter를 실행 전에 고정
+- [ ] 로컬에서 비선형 feasibility 실험 실행
 - [ ] 수정 지표를 두 번째 외부 데이터에서 확인
 
 ---

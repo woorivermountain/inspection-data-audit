@@ -14,6 +14,7 @@ from performance_gap_experiment import (
 )
 from external_validate_siemens import RunningStats, stable_bucket
 from temporal_followup_siemens import business_metrics, select_threshold
+from nonlinear_feasibility_siemens import split_boundaries
 
 
 class MetricsTest(unittest.TestCase):
@@ -78,6 +79,14 @@ class MetricsTest(unittest.TestCase):
         self.assertEqual(result.slip_rate, 0.0)
         self.assertEqual(result.volume_reduction, 0.5)
         self.assertTrue(result.target_met)
+
+    def test_nonlinear_time_boundaries_do_not_overlap(self):
+        timestamps = [f"T{index:03d}" for index in range(100)]
+        train_end, calibration_end, slice_ends = split_boundaries(timestamps)
+        self.assertEqual(train_end, "T049")
+        self.assertEqual(calibration_end, "T069")
+        self.assertEqual(len(slice_ends), 4)
+        self.assertLess(train_end, calibration_end)
 
 
 if __name__ == "__main__":

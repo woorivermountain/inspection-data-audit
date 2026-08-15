@@ -14,3 +14,5 @@ outputs/*
 !outputs/siemens_external_report.md
 !outputs/temporal_followup_business.csv
 !outputs/temporal_followup_report.md
+!outputs/nonlinear_feasibility_business.csv
+!outputs/nonlinear_feasibility_report.md

@@ -20,6 +20,7 @@
 - `download_siemens.py`: 공식 Siemens 파일 다운로드·이어받기·SHA-256 검증
 - `external_validate_siemens.py`: 행 무작위·timestamp 그룹·미래 시간 외부 검증
 - `temporal_followup_siemens.py`: 시간 구간·defect slip·volume reduction 사후 개발 실험
+- `nonlinear_feasibility_siemens.py`: 고정 비선형 모델의 calibration feasibility gate와 미래 평가
 - `run.sh`: 내부 실험과, 데이터가 있을 경우 외부 검증을 순서대로 실행
 - `tests/`: 지표 계산 단위 테스트
 - `outputs/`: 실행 시 생성되는 CSV, JSON, Markdown 결과
@@ -27,7 +28,8 @@
 ## 요구 환경
 
 - Python 3.10 이상
-- 외부 Python 패키지 없음
+- 0~4단계는 외부 Python 패키지 없음
+- 5단계만 `pandas`, `scikit-learn` 필요
 
 macOS 기본 `python3` 또는 기존 데이터 폴더의 가상환경을 사용할 수 있다.
 
@@ -93,6 +95,20 @@ Siemens 시간·업무지표 후속 개발 실험:
 python3 temporal_followup_siemens.py
 ```
 
+비선형 feasibility 실험은 의도하지 않은 대용량 실행을 막기 위해 `run.sh`에 포함하지 않았다. 먼저 환경만 확인한다.
+
+```bash
+/Users/woorivermountain/Desktop/data/.venv/bin/python \
+  nonlinear_feasibility_siemens.py --skip-hash --check-only
+```
+
+확인 후 전체 실행:
+
+```bash
+/Users/woorivermountain/Desktop/data/.venv/bin/python \
+  nonlinear_feasibility_siemens.py --skip-hash
+```
+
 테스트:
 
 ```bash
@@ -114,6 +130,8 @@ python3 -m unittest discover -s tests -v
 - `outputs/siemens_external_report.md`: 고정 판정과 사후 탐색을 구분한 외부 검증 보고서
 - `outputs/temporal_followup_business.csv`: 학습·미래 구간별 confusion matrix와 업무지표
 - `outputs/temporal_followup_report.md`: 다음 외부 데이터용 시간 강건성 후보 프로토콜
+- `outputs/nonlinear_feasibility_business.csv`: 비선형 모델의 구간별 AUROC·업무지표
+- `outputs/nonlinear_feasibility_report.md`: calibration gate와 미래 시간 평가 보고서
 
 ## 3단계 외부 검증 요약
 
