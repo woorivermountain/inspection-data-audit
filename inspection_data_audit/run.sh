@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-DATA_ROOT=${1:-/Users/woorivermountain/Desktop/data}
+DATA_ROOT=${1:-./local_data}
 PYTHON_BIN=${PYTHON_BIN:-python3}
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 OUTPUT_DIR="$SCRIPT_DIR/outputs"

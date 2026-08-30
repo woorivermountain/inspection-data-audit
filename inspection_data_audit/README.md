@@ -39,15 +39,14 @@ macOS 기본 `python3` 또는 기존 데이터 폴더의 가상환경을 사용�
 ## 가장 간단한 실행
 
 ```bash
-cd "/Users/woorivermountain/Documents/연구주제/inspection_data_audit"
-./run.sh "/Users/woorivermountain/Desktop/data"
+cd inspection_data_audit
+./run.sh "/path/to/local-data"
 ```
 
 다른 Python을 사용하려면 `PYTHON_BIN`을 지정한다.
 
 ```bash
-PYTHON_BIN="/Users/woorivermountain/Desktop/data/.venv/bin/python" \
-  ./run.sh "/Users/woorivermountain/Desktop/data"
+PYTHON_BIN=".venv/bin/python" ./run.sh "/path/to/local-data"
 ```
 
 ## 개별 실행
@@ -56,7 +55,7 @@ PYTHON_BIN="/Users/woorivermountain/Desktop/data/.venv/bin/python" \
 
 ```bash
 python3 audit_current_data.py \
-  --data-root "/Users/woorivermountain/Desktop/data" \
+  --data-root "/path/to/local-data" \
   --output-dir outputs
 ```
 
@@ -101,29 +100,25 @@ python3 temporal_followup_siemens.py
 비선형 feasibility 실험은 의도하지 않은 대용량 실행을 막기 위해 `run.sh`에 포함하지 않았다. 먼저 환경만 확인한다.
 
 ```bash
-/Users/woorivermountain/Desktop/data/.venv/bin/python \
-  nonlinear_feasibility_siemens.py --skip-hash --check-only
+.venv/bin/python nonlinear_feasibility_siemens.py --skip-hash --check-only
 ```
 
 확인 후 전체 실행:
 
 ```bash
-/Users/woorivermountain/Desktop/data/.venv/bin/python \
-  nonlinear_feasibility_siemens.py --skip-hash
+.venv/bin/python nonlinear_feasibility_siemens.py --skip-hash
 ```
 
 논문 프로토콜 부분 재현은 먼저 1시드 파일럿으로 실행한다.
 
 ```bash
-/Users/woorivermountain/Desktop/data/.venv/bin/python \
-  paper_protocol_reconstruction_siemens.py --skip-hash --seeds 1
+.venv/bin/python paper_protocol_reconstruction_siemens.py --skip-hash --seeds 1
 ```
 
 파일럿이 정상 완료된 후 논문과 같은 10시드 실행:
 
 ```bash
-/Users/woorivermountain/Desktop/data/.venv/bin/python \
-  paper_protocol_reconstruction_siemens.py --skip-hash --seeds 10
+.venv/bin/python paper_protocol_reconstruction_siemens.py --skip-hash --seeds 10
 ```
 
 원 논문이 인용한 GitLab 코드는 현재 인증 없이는 접근할 수 없고 Bayesian search space도 논문에 기재되지 않았다. 따라서 이 스크립트는 완전 동일 코드 재현이 아니라 공개된 데이터 분할과 임계값 선택 절차의 부분 재현이다.

@@ -53,7 +53,7 @@ def require_ml_packages():
     except ImportError as error:
         raise SystemExit(
             "pandas와 scikit-learn이 필요합니다. 다음 Python으로 실행하세요:\n"
-            "/Users/woorivermountain/Desktop/data/.venv/bin/python nonlinear_feasibility_siemens.py --skip-hash"
+            ".venv/bin/python nonlinear_feasibility_siemens.py --skip-hash"
         ) from error
     return np, pd, sklearn, HistGradientBoostingClassifier, roc_auc_score
 
